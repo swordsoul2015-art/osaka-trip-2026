@@ -54,9 +54,9 @@ const OSAKA_DAYS=[
       {
         "id": "d1e2",
         "time": "16:00–17:00",
-        "title": "相鐵 FRESA INN 大阪難波站前入住",
+        "title": "Y&Y NAMBA HOTEL OSAKA 入住",
         "description": "抵達時間為估計。住宿已決定；實際房型、入住方式與費用以最終訂單為準。",
-        "place": "Sotetsu Fresa Inn Osaka-Namba",
+        "place": "Y&Y NAMBA HOTEL OSAKA, 3-3-12 Nipponbashi, Naniwa Ward, Osaka",
         "type": "transit"
       },
       {
@@ -169,7 +169,7 @@ const OSAKA_DAYS=[
         "time": "15:30–17:00",
         "title": "回飯店放戰利品",
         "description": "先回飯店整理購物袋，晚上不再安排遠程景點。",
-        "place": "Sotetsu Fresa Inn Osaka-Namba",
+        "place": "Y&Y NAMBA HOTEL OSAKA, 3-3-12 Nipponbashi, Naniwa Ward, Osaka",
         "type": "transit"
       },
       {
@@ -291,11 +291,11 @@ const OSAKA_DAYS=[
         "time": "07:15–08:00",
         "title": "早餐｜飯店或便利商店輕食",
         "description": "若最後訂含早餐方案，直接在飯店吃；若未含，前一晚準備飯糰、三明治與飲品。08:30 準時出發前往大鳥大社，不額外排遠處早餐店。",
-        "place": "Sotetsu Fresa Inn Osaka-Namba",
+        "place": "Y&Y NAMBA HOTEL OSAKA, 3-3-12 Nipponbashi, Naniwa Ward, Osaka",
         "type": "food",
         "meal": "早餐",
         "budget": "飯店早餐依訂單；輕食預算 ¥500–900／人",
-        "source": "https://sotetsu-hotels.com/fresa-inn/namba-ekimae/",
+        "source": "https://maps.app.goo.gl/BaWCMARLGy7eG98fA",
         "booking": "",
         "priceSource": ""
       },
@@ -323,7 +323,7 @@ const OSAKA_DAYS=[
         "time": "08:00–08:30",
         "title": "早餐｜飯店附近便利商店輕食",
         "description": "飯糰、優格或三明治配咖啡，快速吃完。行李建議前一晚先整理；08:45 左右出門往難波八阪神社。",
-        "place": "Sotetsu Fresa Inn Osaka-Namba",
+        "place": "Y&Y NAMBA HOTEL OSAKA, 3-3-12 Nipponbashi, Naniwa Ward, Osaka",
         "type": "food",
         "meal": "早餐",
         "budget": "規劃預算 ¥500–900／人",
@@ -335,7 +335,7 @@ const OSAKA_DAYS=[
         "id": "d4e1",
         "time": "09:00–09:40",
         "title": "難波八阪神社",
-        "description": "從相鐵 FRESA INN 步行前往，預留約 30–40 分鐘參拜、拍攝巨大獅子殿。",
+        "description": "從 Y&Y NAMBA HOTEL OSAKA 步行前往，建議抓約 20–25 分鐘；另預留約 30–40 分鐘參拜、拍攝巨大獅子殿。",
         "place": "難波八阪神社",
         "type": "spot"
       },
@@ -344,7 +344,7 @@ const OSAKA_DAYS=[
         "time": "09:40–10:30",
         "title": "回飯店退房、寄放行李",
         "description": "完成退房後再前往橘子街；寄放規則請向飯店確認。",
-        "place": "Sotetsu Fresa Inn Osaka-Namba",
+        "place": "Y&Y NAMBA HOTEL OSAKA, 3-3-12 Nipponbashi, Naniwa Ward, Osaka",
         "type": "transit"
       },
       {
@@ -360,7 +360,7 @@ const OSAKA_DAYS=[
         "time": "14:00–14:30",
         "title": "回飯店取行李",
         "description": "為步行、整理與購票預留緩衝，不再加遠處景點。",
-        "place": "Sotetsu Fresa Inn Osaka-Namba",
+        "place": "Y&Y NAMBA HOTEL OSAKA, 3-3-12 Nipponbashi, Naniwa Ward, Osaka",
         "type": "transit"
       },
       {
@@ -580,8 +580,12 @@ function tripCreateModal(){openModal('建立新旅程',`<p class="dialogtext">�
 function tripDeleteModal(t){if(!t)return;openModal('永久刪除旅程？',`<p class="dialogtext">即將刪除「${esc(t.title)}」。此旅程的行程、記帳、訂位資料與已上傳附件都會一併刪除，且無法復原。</p><label class="field">輸入「刪除」確認<input name="confirm" autocomplete="off" required placeholder="刪除"></label>`,'永久刪除',async fd=>{if(fd.get('confirm').trim()!=='刪除')return toast('請輸入「刪除」後再確認');const submit=document.querySelector('#modal-form button[type="submit"]');if(submit){submit.disabled=true;submit.textContent='刪除中…';}try{const {data:row,error:readError}=await sb.from('trip_data').select('data').eq('user_id',currentUser.id).eq('trip_key',t.trip_key).maybeSingle();if(readError)throw readError;const paths=[];for(const r of Object.values(row?.data?.reservations||{}))for(const f of r?.files||[])if(f.path)paths.push(f.path);for(let i=0;i<paths.length;i+=100){const {error}=await sb.storage.from(CLOUD_BUCKET).remove(paths.slice(i,i+100));if(error)throw error;}const {error:dataError}=await sb.from('trip_data').delete().eq('user_id',currentUser.id).eq('trip_key',t.trip_key);if(dataError)throw dataError;const {error:tripError}=await sb.from('trips').delete().eq('user_id',currentUser.id).eq('trip_key',t.trip_key);if(tripError)throw tripError;localStorage.removeItem(`travel-studio-${t.trip_key}-v1`);if(t.trip_key===OSAKA_TRIP_KEY)localStorage.removeItem(KEY);trips=trips.filter(x=>x.trip_key!==t.trip_key);if(activeTrip?.trip_key===t.trip_key){activeTrip=null;cloudReady=false;}history.replaceState(null,'',location.pathname);closeModal();showTripHub();toast('旅程已永久刪除');}catch(err){if(submit){submit.disabled=false;submit.textContent='永久刪除';}toast(err.message||'刪除失敗，請稍後再試');}});}
 function genericHomeView(){const total=totalEvents();return `${intro('YOUR NEXT JOURNEY',activeTrip.title,`${activeTrip.destination} · ${dateRangeLabel(activeTrip)} · ${activeTrip.travelers} 位旅人`,`<button class="iconbtn" data-action="print" aria-label="列印完整行程">${icon('print')}</button>`)}<section class="hero"><div class="hero-art">${svgArt(2,true)}</div><div class="hero-copy"><p class="eyebrow gold">${esc(activeTrip.destination)} · PERSONAL JOURNEY</p><h2 class="serif">${esc(activeTrip.destination.toUpperCase())}<span>${esc(activeTrip.title)}</span></h2><p>從空白日程開始，把想去的地方、訂位和回憶慢慢放進來。</p><button class="button gold" data-action="navigate" data-view="itinerary" style="margin-top:20px">開始排行程 ${icon('arrow')}</button></div></section><div class="stats">${[['calendar',dateRangeLabel(activeTrip),`${DAYS.length} 天`],['heart',`${activeTrip.travelers} 位旅人`,'一起出發'],['route',`${total} 個安排`,'可隨時新增'],['upload','私人雲端','跨裝置同步']].map(([i,v,t])=>`<div class="stat"><span class="symbol">${icon(i)}</span><div><strong>${esc(v)}</strong><small>${esc(t)}</small></div></div>`).join('')}</div><div class="section-head"><h2>${DAYS.length} 天行程</h2><button class="textbtn" data-action="navigate" data-view="itinerary">查看全部 ${icon('arrow')}</button></div><div class="daygrid">${DAYS.map((d,i)=>`<button class="daycard" data-action="open-day" data-day="${d.id}"><div class="miniart">${svgArt(i)}<span class="daynum">DAY ${String(d.id).padStart(2,'0')}</span></div><div class="daybody"><span class="eyebrow gold">${esc(d.date)} · 週${d.weekday}</span><h3>${allEvents(d.id).length?`${allEvents(d.id).length} 個安排`:'自由的一天'}</h3><p>${esc(d.subtitle)}</p><div class="dayfoot"><span>${allEvents(d.id).length} 個安排</span>${icon('chevron')}</div></div></button>`).join('')}</div>${footnote()}`;}
 function genericToolsView(){const n=state.checklist.filter(x=>x.done).length;return `${intro('TRAVEL TOOLKIT','旅人工具','清單、備忘、購物與資料備份，都跟著這趟旅程。')}<div class="toolsgrid"><section class="panel"><div class="section-head" style="margin:0 0 12px"><h2>行前準備</h2><span id="check-counter" class="counter">${n} / ${state.checklist.length}</span></div><div id="check-rows">${checklistRows()}</div><form id="check-form" class="inlineform"><input name="text" maxlength="200" placeholder="還需要準備什麼？" required><button class="button small" type="submit">${icon('plus')}</button></form></section><section class="panel"><div class="section-head" style="margin:0 0 12px"><h2>購物願望清單</h2><button class="textbtn" data-action="add-shop">${icon('plus')} 新增</button></div><div id="shop-rows">${shopRows()}</div></section><section class="panel"><p class="eyebrow gold">NOTES</p><h2 style="font-size:20px;margin-top:7px">旅行備忘錄</h2><textarea id="memo" class="notepad" maxlength="20000" placeholder="餐廳、品牌、交通或突然想到的事…">${esc(state.memo)}</textarea><p class="subtext" id="memo-status">輸入後會自動同步至私人雲端。</p></section><section class="panel"><p class="eyebrow gold">YOUR DATA</p><h2 style="font-size:20px;margin-top:7px">資料與旅程</h2><div class="toolrow"><div><strong>切換旅程</strong><small>回到我的旅程首頁</small></div><button class="iconbtn" data-action="switch-trip">${icon('route')}</button></div><div class="toolrow"><div><strong>匯出備份</strong><small>保存此趟旅程的文字資料</small></div><button class="iconbtn" data-action="export">${icon('download')}</button></div><div class="toolrow"><div><strong>匯入備份</strong><small>還原至目前旅程</small></div><button class="iconbtn" data-action="import">${icon('upload')}</button></div><div class="toolrow"><div><strong>列印完整行程</strong><small>也可另存為 PDF</small></div><button class="iconbtn" data-action="print">${icon('print')}</button></div></section></div>${footnote()}`;}
-homeView=function(){const html=activeTrip?.trip_key===OSAKA_TRIP_KEY?osakaHomeView():genericHomeView();return html.replace('<div class="stats">',weatherPanel()+'<div class="stats">');};
-toolsView=function(){return activeTrip?.trip_key===OSAKA_TRIP_KEY?osakaToolsView():genericToolsView();};
+const OSAKA_HOTEL={name:'Y&Y NAMBA HOTEL OSAKA',address:'〒556-0005 大阪府大阪市浪速区日本橋3丁目3-12',map:'https://maps.app.goo.gl/BaWCMARLGy7eG98fA',booking:'https://www.yandyhotels.com/booking-engine',query:'Y%26Y%20NAMBA%20HOTEL%20OSAKA%2C%203-3-12%20Nipponbashi%2C%20Naniwa%20Ward%2C%20Osaka'};
+function refreshOsakaHotel(html){if(!html)return html;return html.replaceAll('相鐵 FRESA INN<br>大阪難波站前',OSAKA_HOTEL.name).replaceAll('相鐵 FRESA INN 大阪難波站前',OSAKA_HOTEL.name).replaceAll('相鐵 FRESA INN',OSAKA_HOTEL.name).replaceAll('大阪難波站前 / 已決定','日本橋 3 丁目 / 已決定').replaceAll('〒556-0011 大阪府大阪市浪速区難波中1丁目6-5 相鉄フレッサイン大阪なんば駅前',`${OSAKA_HOTEL.address} ${OSAKA_HOTEL.name}`).replaceAll('〒556-0011 大阪府大阪市浪速区難波中1丁目6-5',OSAKA_HOTEL.address).replaceAll('大阪 Metro 難波站 7 號出口附近／南海難波站步行可達','日本橋 3 丁目／南海難波站步行可達').replaceAll('Sotetsu Fresa Inn Osaka-Namba',OSAKA_HOTEL.name).replaceAll('https://sotetsu-hotels.com/fresa-inn/namba-ekimae/',OSAKA_HOTEL.booking).replaceAll('官方網站 ↗','訂房網站 ↗').replaceAll('飯店官網 ↗','訂房網站 ↗').replaceAll('資料更新：2026.10.05','資料更新：2026.10.06').replace(/https:\/\/www\.google\.com\/maps\/search\/\?api=1&amp;query=Sotetsu%20Fresa%20Inn%20Osaka-Namba/g,OSAKA_HOTEL.map).replace(/https:\/\/www\.google\.com\/maps\/search\/\?api=1&query=Sotetsu%20Fresa%20Inn%20Osaka-Namba/g,OSAKA_HOTEL.map).replace(/https:\/\/www\.google\.com\/maps\/dir\/\?api=1&amp;destination=Sotetsu%20Fresa%20Inn%20Osaka-Namba/g,`https://www.google.com/maps/dir/?api=1&amp;destination=${OSAKA_HOTEL.query}`).replace(/https:\/\/www\.google\.com\/maps\/dir\/\?api=1&destination=Sotetsu%20Fresa%20Inn%20Osaka-Namba/g,`https://www.google.com/maps/dir/?api=1&destination=${OSAKA_HOTEL.query}`);}
+homeView=function(){const html=activeTrip?.trip_key===OSAKA_TRIP_KEY?refreshOsakaHotel(osakaHomeView()):genericHomeView();return html.replace('<div class="stats">',weatherPanel()+'<div class="stats">');};
+toolsView=function(){return activeTrip?.trip_key===OSAKA_TRIP_KEY?refreshOsakaHotel(osakaToolsView()):genericToolsView();};
+const itineraryViewWithoutHotelRefresh=itineraryView;
+itineraryView=function(){const html=itineraryViewWithoutHotelRefresh();return activeTrip?.trip_key===OSAKA_TRIP_KEY?refreshOsakaHotel(html):html;};
 placesView=function(){return activeTrip?.trip_key===OSAKA_TRIP_KEY?osakaPlacesView():`${intro('PLACES','景點收藏','新旅程的景點可先從每日行程加入。')}<div class="empty">目前沒有預設景點。<br>到「每日行程」按新增安排，即可建立景點、餐廳與購物行程。</div>${footnote()}`;};
 const renderCoreWithWeather=render;
 render=function(){renderCoreWithWeather();clearTimeout(weatherTimer);if(view==='home')setTimeout(()=>loadWeather(),0);};
@@ -595,7 +599,7 @@ function memberSettingsModal(){openModal('管理旅伴',`<p class="dialogtext">�
 function settingsModal(){const code=localCurrency();openModal('幣別、匯率與預算',`<div class="formgrid"><label class="field full">旅程當地幣別<select name="currency">${currencyOptions(code)}</select><small>若已有非台幣支出，更換幣別會將這些紀錄改標為新的當地幣別。</small></label><label class="field full">1 單位當地幣別＝多少台幣<input type="number" name="rate" inputmode="decimal" min="0.000001" max="1000" step="0.000001" value="${state.rate}" required></label><div class="field full"><button class="button light small" type="button" data-action="fetch-rate">取得最新參考匯率</button><small id="rate-source">參考匯率每日更新；可自行覆寫，儲存後才會套用。</small></div><label class="field full">旅程總預算（TWD）<input type="number" name="budget" min="0" max="1000000000" step="1" value="${state.budget}" required></label></div>`,'儲存設定',fd=>{const next=fd.get('currency'),rate=+fd.get('rate'),budget=+fd.get('budget');if(!Object.hasOwn(currencies,next)||!Number.isFinite(rate)||rate<=0||rate>1000||!Number.isFinite(budget)||budget<0)return toast('請輸入有效的幣別、匯率與預算');if(next!==state.currencyCode)state.expenses=state.expenses.map(x=>x.currency==='TWD'?x:{...x,currency:next});state.currencyCode=next;state.rate=next==='TWD'?1:rate;state.budget=budget;save();closeModal();render();toast('已更新幣別、匯率與預算');});}
 function shopModal(){openModal('加入購物清單',`<div class="formgrid"><label class="field full">想買什麼？<input name="text" maxlength="200" required placeholder="例如：伴手禮、球鞋"></label><label class="field full">在哪裡找？<input name="store" maxlength="100" placeholder="例如：Costco / 梅田 / 橘子街"></label></div>`,'加入清單',fd=>{const text=fd.get('text').trim();if(!text)return toast('請輸入商品名稱');state.shopping.push({id:uid(),text,store:fd.get('store').trim(),done:false});save();closeModal();render();toast('已加入購物清單');});}
 function exportData(){const backup=JSON.parse(JSON.stringify(state));for(const r of Object.values(backup.reservations||{}))r.files=[];const tripName=activeTrip?.trip_key||'trip',blob=new Blob([JSON.stringify({app:'travel-studio',trip:activeTrip,exportedAt:new Date().toISOString(),attachmentFilesIncluded:false,data:backup},null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=tripName+'-backup-'+new Date().toISOString().slice(0,10)+'.json';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),10000);toast('備份已下載；訂位文字已包含，附件檔案不包含');}
-function printAll(){document.getElementById('print-content').innerHTML=`<h1>大阪四日旅程 · 2026.12.04–12.07</h1><p>2 位成人 · 相鐵 FRESA INN 大阪難波站前（住宿已決定）</p><p>CI152：12/4 TPE T2 09:45 → KIX T1 13:20<br>CI173：12/7 KIX T1 19:00 → TPE T2 21:25（各機場當地時間）</p>${DAYS.map(d=>`<section class="printday"><h2>${d.label} 週${d.weekday} · ${d.subtitle}</h2>${allEvents(d.id).map(e=>`<article><b>${esc(e.time)}　${esc(e.title)}</b><p>${esc(e.description)}</p>${e.budget?`<p class="mealprice">${esc(e.budget)}</p>`:''}${state.notes[e.id]?`<p>備註：${esc(state.notes[e.id])}</p>`:''}</article>`).join('')}<p style="margin-top:12px">交通：${esc(d.note)}</p></section>`).join('')}`;window.print();}
+function printAll(){document.getElementById('print-content').innerHTML=`<h1>大阪四日旅程 · 2026.12.04–12.07</h1><p>2 位成人 · Y&Y NAMBA HOTEL OSAKA（住宿已決定）</p><p>CI152：12/4 TPE T2 09:45 → KIX T1 13:20<br>CI173：12/7 KIX T1 19:00 → TPE T2 21:25（各機場當地時間）</p>${DAYS.map(d=>`<section class="printday"><h2>${d.label} 週${d.weekday} · ${d.subtitle}</h2>${allEvents(d.id).map(e=>`<article><b>${esc(e.time)}　${esc(e.title)}</b><p>${esc(e.description)}</p>${e.budget?`<p class="mealprice">${esc(e.budget)}</p>`:''}${state.notes[e.id]?`<p>備註：${esc(state.notes[e.id])}</p>`:''}</article>`).join('')}<p style="margin-top:12px">交通：${esc(d.note)}</p></section>`).join('')}`;window.print();}
 const osakaPrintAll=printAll;
 printAll=function(){if(activeTrip?.trip_key===OSAKA_TRIP_KEY)return osakaPrintAll();document.getElementById('print-content').innerHTML=`<h1>${esc(activeTrip.title)}</h1><p>${esc(activeTrip.destination)} · ${esc(activeTrip.start_date)}–${esc(activeTrip.end_date)} · ${activeTrip.travelers} 位旅人</p>${DAYS.map(d=>`<section class="printday"><h2>DAY ${d.id} · ${esc(d.date)} 週${d.weekday}</h2>${allEvents(d.id).map(e=>`<article><b>${esc(e.time)}　${esc(e.title)}</b><p>${esc(e.description)}</p>${state.notes[e.id]?`<p>備註：${esc(state.notes[e.id])}</p>`:''}</article>`).join('')||'<p>尚未安排行程</p>'}</section>`).join('')}`;window.print();};
 const openTripWithoutFlush=openTrip;
