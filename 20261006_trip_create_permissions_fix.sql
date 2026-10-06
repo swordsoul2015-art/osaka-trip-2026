@@ -20,7 +20,10 @@ create policy "Trip members view trips"
 on public.trips
 for select
 to authenticated
-using (private.user_can_access_trip(id));
+using (
+  (select auth.uid()) = user_id
+  or private.user_can_access_trip(id)
+);
 
 -- New trips are initialized in trip_data immediately after catalog creation.
 drop policy if exists "Trip members create trip data" on public.trip_data;

@@ -76,7 +76,10 @@ drop policy if exists "Trip owners delete trips" on public.trips;
 
 create policy "Trip members view trips" on public.trips
 for select to authenticated
-using (private.user_can_access_trip(id));
+using (
+  (select auth.uid()) = user_id
+  or private.user_can_access_trip(id)
+);
 
 create policy "Trip owners create trips" on public.trips
 for insert to authenticated
