@@ -198,6 +198,8 @@ $$;
 revoke all on function public.accept_trip_invitations() from public, anon;
 grant execute on function public.accept_trip_invitations() to authenticated;
 
+grant select, insert, update, delete on public.trips to authenticated;
+grant select, insert, update, delete on public.trip_data to authenticated;
 grant select, insert, update, delete on public.trip_members to authenticated;
 grant select, insert, update, delete on public.trip_invitations to authenticated;
 
