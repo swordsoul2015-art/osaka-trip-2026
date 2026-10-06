@@ -1,4 +1,4 @@
-const CACHE='travel-studio-shell-v1';
+const CACHE='travel-studio-shell-v2';
 const SHELL=['./','./index.html','./manifest.json','./icon.svg','./icon-192.png','./icon-512.png','https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4/dist/umd/supabase.min.js'];
 self.addEventListener('install',event=>{
   event.waitUntil((async()=>{const cache=await caches.open(CACHE);await Promise.allSettled(SHELL.map(url=>cache.add(url)));await self.skipWaiting();})());
