@@ -125,7 +125,7 @@ const OSAKA_DAYS=[
     "weekday": "六",
     "title": "跟著 KLOOK 出發，輕鬆玩一天",
     "subtitle": "KLOOK 一日遊・難波晚餐",
-    "note": "KLOOK 一日遊的實際集合時間、集合地點與景點順序，請以訂單憑證及當日通知為準。午餐依團程動線彈性調整；回到難波後，19:00 前往已訂位的 Grilled Yakitori Tokoha Namba。",
+    "note": "KLOOK 一日遊的實際集合時間、集合地點、用餐安排與景點順序，請以訂單憑證及當日通知為準。回到難波後，19:00 前往已訂位的 Grilled Yakitori Tokoha Namba。",
     "events": [
       {
         "id": "d2breakfast",
@@ -151,19 +151,6 @@ const OSAKA_DAYS=[
         "sourceLabel": "KLOOK 行程 ↗"
       },
       {
-        "id": "d2dekasan",
-        "time": "12:00–13:00",
-        "title": "午餐｜Dekasan - sandwich",
-        "description": "午餐決定吃 Dekasan - sandwich；實際用餐時間依 KLOOK 一日遊當天動線彈性調整。",
-        "place": "Dekasan - sandwich",
-        "type": "food",
-        "meal": "午餐",
-        "budget": "餐費依現場菜單",
-        "source": "",
-        "booking": "",
-        "priceSource": ""
-      },
-      {
         "id": "d2tokoha",
         "time": "19:00–20:30",
         "title": "晚餐｜Grilled Yakitori Tokoha Namba",
@@ -186,7 +173,7 @@ const OSAKA_DAYS=[
     "weekday": "日",
     "title": "先參拜，再把午後留給梅田",
     "subtitle": "大鳥大社・大阪天滿宮・梅田",
-    "note": "大鳥大社在堺市，大阪天滿宮在市區，兩者需要一段跨區交通。午餐已改為 Kagawa-udon Kitashinchi，但目前公開資料顯示週日公休且以晚間營業為主，出發前務必再次確認。晚餐 Shabuzen Umedaten 已訂位於 18:30。",
+    "note": "大鳥大社在堺市，大阪天滿宮在市區，兩者需要一段跨區交通。午餐改為 Dekasan - sandwich；晚餐 Shabuzen Umedaten 已訂位於 18:30。Kagawa-udon Kitashinchi 改排 22:00 宵夜，但公開資料顯示週日公休，當晚務必先確認是否營業。",
     "events": [
       {
         "id": "d3e0",
@@ -215,16 +202,15 @@ const OSAKA_DAYS=[
       {
         "id": "d3e3",
         "time": "12:00–12:45",
-        "title": "午餐｜Kagawa-udon Kitashinchi",
-        "description": "北新地的咖哩烏龍麵名店。目前公開店家資料顯示週日公休，且以晚間營業為主；12/6 午餐安排需在出發前再次確認，若未營業請改選北新地／梅田附近備案。",
-        "place": "Kagawa-udon Kitashinchi",
+        "title": "午餐｜Dekasan - sandwich",
+        "description": "午餐改吃 Dekasan - sandwich。實際用餐時間可依大鳥大社行程與交通狀況彈性調整，餐後再前往大阪天滿宮。",
+        "place": "Dekasan - sandwich",
         "type": "food",
         "meal": "午餐",
-        "budget": "參考預算 ¥1,000–3,000／人",
-        "source": "https://tabelog.com/en/osaka/A2701/A270101/27000166/",
+        "budget": "餐費依現場菜單",
+        "source": "",
         "booking": "",
-        "priceSource": "",
-        "reservationStatus": "需確認 · 公開資料顯示週日公休"
+        "priceSource": ""
       },
       {
         "id": "d3e4",
@@ -284,6 +270,20 @@ const OSAKA_DAYS=[
         "description": "用餐後依體力與商場營業時間決定繼續逛街，或直接回飯店休息。",
         "place": "Osaka Station",
         "type": "shop"
+      },
+      {
+        "id": "d3kagawa",
+        "time": "22:00–23:00",
+        "title": "宵夜｜Kagawa-udon Kitashinchi",
+        "description": "北新地的咖哩烏龍麵宵夜。公開店家資料目前顯示週日公休；12/6 當晚務必先確認是否營業，若未營業則改選北新地／梅田附近宵夜。",
+        "place": "Kagawa-udon Kitashinchi",
+        "type": "food",
+        "meal": "宵夜",
+        "budget": "參考預算 ¥1,000–3,000／人",
+        "source": "https://tabelog.com/en/osaka/A2701/A270101/27000166/",
+        "booking": "",
+        "priceSource": "",
+        "reservationStatus": "需確認 · 公開資料顯示週日公休"
       }
     ]
   },
@@ -420,7 +420,7 @@ const catIcons={food:'food',shop:'bag',transport:'train',stay:'hotel',ticket:'pi
 let DAYS=structuredClone(OSAKA_DAYS);
 const baseChecklist=[['passport','護照與班機資料'],['hotel','飯店訂單與房型'],['membership','會員卡／票券'],['card','信用卡與當地現金'],['network','海外上網／eSIM'],['luggage','行李額度與購物空間'],['transport','機場與市區交通'],['shrine','景點營業時間與預約']].map(([id,text])=>({id,text,done:false,custom:false}));
 const PLACES=[
-{"id": "food-yakiniku-m", "name": "松阪牛燒肉 M・法善寺橫丁店", "area": "難波・法善寺", "day": 1, "category": "food", "type": "美食", "note": "12/4 晚餐，目標 18:30。主打松阪牛，建議事先線上訂位；規劃 ¥9,680–12,000／人。", "query": "松阪牛焼肉M 法善寺横丁店", "url": "https://matsusaka-projects.com/english/shop/houzenji"},{"id": "food-cafe", "name": "Saint Marc Café", "area": "南海難波站", "day": 2, "category": "food", "type": "美食", "note": "12/5 早餐。規劃 ¥600–1,000／人；南海難波站 3F。", "query": "サンマルクカフェ 南海なんば駅店", "url": "https://www.saint-marc-hd.com/saintmarccafe/shop/514/"},{"id":"food-dekasan","name":"Dekasan - sandwich","area":"依 KLOOK 團程動線","day":2,"category":"food","type":"美食","note":"12/5 午餐；實際用餐時間依一日遊當日動線彈性調整。","query":"Dekasan sandwich","url":""},{"id":"food-tokoha","name":"Grilled Yakitori Tokoha Namba","area":"難波","day":2,"category":"food","type":"美食","note":"12/5 19:00 晚餐，已訂位。","query":"Grilled Yakitori Tokoha Namba","url":""},{"id":"food-udon","name":"Kagawa-udon Kitashinchi","area":"北新地","day":3,"category":"food","type":"美食","note":"12/6 午餐；公開資料顯示週日公休且以晚間營業為主，出發前務必再次確認。參考預算 ¥1,000–3,000／人。","query":"Kagawa-udon Kitashinchi","url":"https://tabelog.com/en/osaka/A2701/A270101/27000166/"},{"id":"food-shabuzen","name":"Shabuzen Umedaten","area":"梅田","day":3,"category":"food","type":"美食","note":"12/6 18:30 晚餐，已訂位。","query":"Shabuzen Umedaten","url":""},{"id": "food-tables", "name": "TABLES 南堀江", "area": "南堀江", "day": 4, "category": "food", "type": "美食", "note": "12/7 12:00 午餐。規劃 ¥1,500–2,500／人；最後一天避免久候。", "query": "TABLES Coffee Bakery Diner 南堀江", "url": "https://www.tables-coffeebakerydiner.com/"},
+{"id": "food-yakiniku-m", "name": "松阪牛燒肉 M・法善寺橫丁店", "area": "難波・法善寺", "day": 1, "category": "food", "type": "美食", "note": "12/4 晚餐，目標 18:30。主打松阪牛，建議事先線上訂位；規劃 ¥9,680–12,000／人。", "query": "松阪牛焼肉M 法善寺横丁店", "url": "https://matsusaka-projects.com/english/shop/houzenji"},{"id": "food-cafe", "name": "Saint Marc Café", "area": "南海難波站", "day": 2, "category": "food", "type": "美食", "note": "12/5 早餐。規劃 ¥600–1,000／人；南海難波站 3F。", "query": "サンマルクカフェ 南海なんば駅店", "url": "https://www.saint-marc-hd.com/saintmarccafe/shop/514/"},{"id":"food-dekasan","name":"Dekasan - sandwich","area":"依當日動線","day":3,"category":"food","type":"美食","note":"12/6 午餐；實際時間可依上午行程與交通狀況彈性調整。","query":"Dekasan sandwich","url":""},{"id":"food-tokoha","name":"Grilled Yakitori Tokoha Namba","area":"難波","day":2,"category":"food","type":"美食","note":"12/5 19:00 晚餐，已訂位。","query":"Grilled Yakitori Tokoha Namba","url":""},{"id":"food-udon","name":"Kagawa-udon Kitashinchi","area":"北新地","day":3,"category":"food","type":"美食","note":"12/6 22:00 宵夜；公開資料顯示週日公休，當晚務必先確認是否營業。參考預算 ¥1,000–3,000／人。","query":"Kagawa-udon Kitashinchi","url":"https://tabelog.com/en/osaka/A2701/A270101/27000166/"},{"id":"food-shabuzen","name":"Shabuzen Umedaten","area":"梅田","day":3,"category":"food","type":"美食","note":"12/6 18:30 晚餐，已訂位。","query":"Shabuzen Umedaten","url":""},{"id": "food-tables", "name": "TABLES 南堀江", "area": "南堀江", "day": 4, "category": "food", "type": "美食", "note": "12/7 12:00 午餐。規劃 ¥1,500–2,500／人；最後一天避免久候。", "query": "TABLES Coffee Bakery Diner 南堀江", "url": "https://www.tables-coffeebakerydiner.com/"},
 
 {id:'yasaka',name:'難波八阪神社',area:'難波',day:4,category:'shrine',type:'參拜',note:'巨大的獅子殿，安排在最後一天早上。',query:'難波八阪神社',url:'https://nambayasaka.jp/'},
 {id:'otori',name:'大鳥大社',area:'堺市',day:3,category:'shrine',type:'參拜',note:'JR 鳳站西出口步行約 5 分鐘。授與所目前 09:00–16:30。',query:'大鳥大社 堺市',url:'https://www.ootoritaisha.jp/access/'},
